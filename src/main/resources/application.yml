@@ -1,0 +1,5 @@
+# Application configuration
+quarkus:
+  http:
+    root-path: /api/v1
+    port: 8087
