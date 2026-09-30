@@ -3,3 +3,18 @@ quarkus:
   http:
     root-path: /api/v1
     port: 8087
+
+kafka:
+  bootstrap:
+    servers: localhost:29092
+
+mp:
+  messaging:
+    outgoing:
+      payment-order-initiation-out:
+        connector: smallrye-kafka
+        topic: payment-order-initiation
+        key:
+          serializer: org.apache.kafka.common.serialization.StringSerializer
+        value:
+          serializer: io.quarkus.kafka.client.serialization.ObjectMapperSerializer
