@@ -39,6 +39,7 @@ public class ApplicationExceptionMapper implements ExceptionMapper<ApplicationEx
     return switch (exceptionType) {
       case BAD_REQUEST -> MESSAGE_INVALID_INPUT_DATA;
       case CONFLICT -> MESSAGE_BUSINESS_RULE_VIOLATION;
+      case SERVICE_UNAVAILABLE -> MESSAGE_SERVICE_UNAVAILABLE;
       default -> MESSAGE_UNEXPECTED_ERROR;
     };
   }
@@ -47,6 +48,7 @@ public class ApplicationExceptionMapper implements ExceptionMapper<ApplicationEx
     return switch (exceptionType) {
       case BAD_REQUEST -> Status.BAD_REQUEST;
       case CONFLICT -> Status.CONFLICT;
+      case SERVICE_UNAVAILABLE -> Status.SERVICE_UNAVAILABLE;
       default -> Status.INTERNAL_SERVER_ERROR;
     };
   }

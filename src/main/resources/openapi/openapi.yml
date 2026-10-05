@@ -82,6 +82,8 @@ components:
           type: string
           description: 'tThe actual unique code or number (e.g., passport number, drivers license number).'
           format: Value
+      required:
+        - identifierValue
       description: An identifier that allows to uniquely refer to an instance of a Document.
     TransactionTypeValues:
       enum:
@@ -184,12 +186,16 @@ components:
           $ref: '#/components/schemas/AccountIdentificationTypeValues'
         accountIdentification:
           $ref: '#/components/schemas/Identifier'
+      required:
+        - accountIdentification
       description: The identifier of account like Account Number.
     Account:
       type: object
       properties:
         accountIdentification:
           $ref: '#/components/schemas/AccountIdentification'
+      required:
+        - accountIdentification
       description: ''
     PaymentTransaction:
       type: object
@@ -202,6 +208,8 @@ components:
           $ref: '#/components/schemas/TransactionTypeValues'
         financialTransactionFromAccount:
           $ref: '#/components/schemas/Account'
+      required:
+        - financialTransactionFromAccount
       description: The details of the payment transaction
     PaymentTransactionResponse:
       type: object
@@ -218,6 +226,8 @@ components:
       properties:
         partyIdentification:
           $ref: '#/components/schemas/PartyIdentification'
+      required:
+        - partyIdentification
       description: Reference to the payer
     PaymentOrderInitiationTransaction:
       type: object
@@ -228,6 +238,9 @@ components:
           $ref: '#/components/schemas/PaymentTransaction'
         payerReference:
           $ref: '#/components/schemas/Payer'
+      required:
+        - paymentTransaction
+        - payerReference
       description: 'Execute a well-bounded financial transaction/task, typically involving largely automated/structured fulfillment processing within Payment Initiation. '
     PaymentOrderInitiationTransactionResponse:
       type: object
@@ -264,6 +277,8 @@ components:
           $ref: '#/components/schemas/PartyIdentificationTypeValues'
         partyIdentification:
           $ref: '#/components/schemas/Identifier'
+      required:
+        - partyIdentification
       description: ''
   responses:
     BadRequest:

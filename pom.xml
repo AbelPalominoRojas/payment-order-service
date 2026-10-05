@@ -68,6 +68,12 @@
             <artifactId>quarkus-smallrye-graphql-client</artifactId>
         </dependency>
 
+        <!-- Fault tolerance (timeout, retry, circuit breaker) for downstream calls -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-smallrye-fault-tolerance</artifactId>
+        </dependency>
+
         <!-- Validation with Hibernate -->
         <dependency>
             <groupId>io.quarkus</groupId>

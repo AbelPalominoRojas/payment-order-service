@@ -31,7 +31,11 @@ public enum ExceptionCatalog {
   PARTY_REFERENCE_EMPTY(
       "POSER0006",
       ExceptionType.CONFLICT,
-      "The party reference service returned an empty response.");
+      "The party reference service returned an empty response."),
+  DOWNSTREAM_UNAVAILABLE(
+      "POSER0007",
+      ExceptionType.SERVICE_UNAVAILABLE,
+      "A downstream service is temporarily unavailable or timed out. Please try again later.");
 
   private final String code;
   private final ExceptionType exceptionType;
