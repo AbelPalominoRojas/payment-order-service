@@ -1,0 +1,112 @@
+{
+	"info": {
+		"_postman_id": "8ff884b3-17c3-4cd9-8e19-5effec68bfcf",
+		"name": "House-Party-Protocol",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "party-reference-service​",
+			"item": [
+				{
+					"name": "partyReferenceById",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query partyReferenceById {\n  partyReference(documentNumber: \"80123456\") {\n    partyReference {\n      partyId\n      partyIdentification {\n        partyIdentificationType\n        partyIdentification {\n          identifierValue\n        }\n      }\n      partyNames {\n        partyNameType\n        partyName\n      }\n    }\n    partyType\n  }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8085/api/v1/graphql",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8085",
+							"path": [
+								"api",
+								"v1",
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "current-account-service",
+			"item": [
+				{
+					"name": "{id}/retrieve",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8086/api/v1/savings-account/:savingsAccountId/retrieve",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8086",
+							"path": [
+								"api",
+								"v1",
+								"savings-account",
+								":savingsAccountId",
+								"retrieve"
+							],
+							"variable": [
+								{
+									"key": "savingsAccountId",
+									"value": "100000000007"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "payment-order-service​",
+			"item": [
+				{
+					"name": "initiate",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"paymentTransactionType\": \"FinancialTransaction\",\n  \"paymentTransaction\": {\n    \"paymentTransactionType\": \"Cashtransaction\",\n    \"paymentTransactionAmount\": {\n      \"amountValue\": \"120\",\n      \"amountCurrency\": {\n        \"accountCurrencyType\": \"PEN\"\n      }\n    },\n    \"transactionType\": \"FinancialTransaction\",\n    \"financialTransactionFromAccount\": {\n      \"accountIdentification\": {\n        \"accountIdentificationType\": \"AccountNumber\",\n        \"accountIdentification\": {\n          \"identifierValue\": \"100000000007\"\n        }\n      }\n    }\n  },\n  \"payerReference\": {\n    \"partyIdentification\": {\n      \"partyIdentificationType\": \"Nationalregistrationidentificationnumber\",\n      \"partyIdentification\": {\n        \"identifierValue\": \"80123456\"\n      }\n    }\n  }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8087/api/v1/payment-order-initiation/initiate",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8087",
+							"path": [
+								"api",
+								"v1",
+								"payment-order-initiation",
+								"initiate"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
