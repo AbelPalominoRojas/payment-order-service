@@ -62,6 +62,12 @@
             <artifactId>quarkus-rest-client-jackson</artifactId>
         </dependency>
 
+        <!-- GraphQL Client -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-smallrye-graphql-client</artifactId>
+        </dependency>
+
         <!-- Validation with Hibernate -->
         <dependency>
             <groupId>io.quarkus</groupId>
@@ -197,6 +203,8 @@
                 </configuration>
 
                 <executions>
+
+                    <!-- Generate server API interfaces from OpenAPI specification -->
                     <execution>
                         <id>generate-server-api</id>
                         <phase>generate-sources</phase>
@@ -237,8 +245,7 @@
                         </configuration>
                     </execution>
 
-
-
+                    <!-- Generate client code for current-account-service from OpenAPI specification -->
                     <execution>
                         <id>current-account-service</id>
                         <phase>generate-sources</phase>
@@ -252,8 +259,6 @@
                             <generatorName>java-microprofile</generatorName>
                             <apiPackage>${project.groupId}.${server-package}.${client-package}.currentaccount</apiPackage>
                             <modelPackage>${project.groupId}.${server-package}.${client-package}.currentaccount.model</modelPackage>
-
-                            <!--<generateSupportingFiles>false</generateSupportingFiles>-->
 
                             <configOptions>
                                 <library>microprofile</library>

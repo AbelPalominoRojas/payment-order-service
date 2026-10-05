@@ -4,6 +4,7 @@ import com.ironman.paymentorder.application.business.PaymentOrderInitiationServi
 import com.ironman.paymentorder.application.exception.ApplicationException;
 import com.ironman.paymentorder.application.exception.ExceptionCatalog;
 import com.ironman.paymentorder.application.integration.currentaccount.SavingsAccountClient;
+import com.ironman.paymentorder.application.integration.partyreference.PartyReferenceClient;
 import com.ironman.paymentorder.application.kafka.PaymentOrderInitiationProducer;
 import com.ironman.paymentorder.application.model.api.*;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -16,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 public class PaymentOrderInitiationServiceImpl implements PaymentOrderInitiationService {
   private final PaymentOrderInitiationProducer paymentOrderInitiationProducer;
   private final SavingsAccountClient savingsAccountClient;
+  private final PartyReferenceClient partyReferenceClient;
 
   @Override
   public PaymentTransactionResponse initiate(
@@ -28,6 +30,17 @@ public class PaymentOrderInitiationServiceImpl implements PaymentOrderInitiation
       if (account == null) {
         log.warn("Current account service returned an empty response for accountId: {}", accountId);
         throw ExceptionCatalog.CURRENT_ACCOUNT_EMPTY.buildException();
+      }
+
+      var documentNumber = getDocumentNumber(paymentOrderInitiationTransaction.getPayerReference());
+
+      var partyReference = partyReferenceClient.retrieve(documentNumber);
+
+      if (partyReference == null) {
+        log.warn(
+            "Party reference service returned an empty response for documentNumber: {}",
+            documentNumber);
+        throw ExceptionCatalog.PARTY_REFERENCE_EMPTY.buildException();
       }
 
       var correlationId = paymentOrderInitiationProducer.publish(paymentOrderInitiationTransaction);
@@ -49,6 +62,10 @@ public class PaymentOrderInitiationServiceImpl implements PaymentOrderInitiation
         .getAccountIdentification()
         .getAccountIdentification()
         .getIdentifierValue();
+  }
+
+  private static String getDocumentNumber(Payer payerReference) {
+    return payerReference.getPartyIdentification().getPartyIdentification().getIdentifierValue();
   }
 
   private static PaymentTransactionResponse buildPaymentTransactionResponse(String correlationId) {

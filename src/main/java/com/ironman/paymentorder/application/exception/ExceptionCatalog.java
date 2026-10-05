@@ -23,7 +23,15 @@ public enum ExceptionCatalog {
   CURRENT_ACCOUNT_EMPTY(
       "POSER0004",
       ExceptionType.CONFLICT,
-      "The current account service returned an empty response.");
+      "The current account service returned an empty response."),
+  PARTY_REFERENCE_SERVICE(
+      "POSER0005",
+      ExceptionType.INTERNAL_SERVER_ERROR,
+      "An unexpected error occurred in the party reference service."),
+  PARTY_REFERENCE_EMPTY(
+      "POSER0006",
+      ExceptionType.CONFLICT,
+      "The party reference service returned an empty response.");
 
   private final String code;
   private final ExceptionType exceptionType;

@@ -8,6 +8,10 @@ quarkus:
     current-account-service:
       url: http://localhost:8086/api/v1
 
+  smallrye-graphql-client:
+    party-reference-service:
+      url: http://localhost:8085/api/v1/graphql
+
 kafka:
   bootstrap:
     servers: localhost:29092
