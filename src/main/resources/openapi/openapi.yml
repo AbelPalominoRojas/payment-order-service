@@ -11,13 +11,13 @@ servers:
 tags:
   - name: CR - PaymentOrderInitiationTransaction
 paths:
-  /PaymentOrderInitiation/Initiate:
+  /payment-order-initiation/initiate:
     post:
       tags:
         - CR - PaymentOrderInitiationTransaction
       summary: InCR Initiate a payment transaction
       description: InCR Initiate a payment transaction
-      operationId: Initiate
+      operationId: initiate
       requestBody:
         $ref: '#/components/requestBodies/PaymentOrderInitiationTransaction'
       responses:
@@ -78,7 +78,7 @@ components:
     Identifier:
       type: object
       properties:
-        IdentifierValue:
+        identifierValue:
           type: string
           description: 'tThe actual unique code or number (e.g., passport number, drivers license number).'
           format: Value

@@ -38,7 +38,7 @@ public class ApplicationExceptionMapper implements ExceptionMapper<ApplicationEx
   private String descriptionFromExceptionType(ExceptionType exceptionType) {
     return switch (exceptionType) {
       case BAD_REQUEST -> MESSAGE_INVALID_INPUT_DATA;
-      case PRECONDITION_FAILED -> MESSAGE_BUSINESS_RULE_VIOLATION;
+      case CONFLICT -> MESSAGE_BUSINESS_RULE_VIOLATION;
       default -> MESSAGE_UNEXPECTED_ERROR;
     };
   }
@@ -46,7 +46,7 @@ public class ApplicationExceptionMapper implements ExceptionMapper<ApplicationEx
   private Status mapToJaxRsExceptionType(ExceptionType exceptionType) {
     return switch (exceptionType) {
       case BAD_REQUEST -> Status.BAD_REQUEST;
-      case PRECONDITION_FAILED -> Status.PRECONDITION_FAILED;
+      case CONFLICT -> Status.CONFLICT;
       default -> Status.INTERNAL_SERVER_ERROR;
     };
   }

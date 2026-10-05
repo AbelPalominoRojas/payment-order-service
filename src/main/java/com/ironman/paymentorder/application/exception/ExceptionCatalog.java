@@ -15,7 +15,15 @@ public enum ExceptionCatalog {
   APPLICATION_ERROR(
       "POSER0002",
       ExceptionType.INTERNAL_SERVER_ERROR,
-      "An unexpected error occurred, please try again later.");
+      "An unexpected error occurred, please try again later."),
+  CURRENT_ACCOUNT_SERVICE(
+      "POSER0003",
+      ExceptionType.INTERNAL_SERVER_ERROR,
+      "An unexpected error occurred in the current account service."),
+  CURRENT_ACCOUNT_EMPTY(
+      "POSER0004",
+      ExceptionType.CONFLICT,
+      "The current account service returned an empty response.");
 
   private final String code;
   private final ExceptionType exceptionType;

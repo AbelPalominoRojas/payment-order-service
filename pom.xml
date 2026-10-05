@@ -22,6 +22,7 @@
         <spotless-maven.version>3.10.1</spotless-maven.version>
         <openapi-generator.version>7.25.0</openapi-generator.version>
         <server-package>application</server-package>
+        <client-package>integration</client-package>
     </properties>
 
     <dependencyManagement>
@@ -53,6 +54,12 @@
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-rest-jackson</artifactId>
+        </dependency>
+
+        <!-- REST Client with Jackson -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-rest-client-jackson</artifactId>
         </dependency>
 
         <!-- Validation with Hibernate -->
@@ -184,6 +191,11 @@
                 <groupId>org.openapitools</groupId>
                 <artifactId>openapi-generator-maven-plugin</artifactId>
                 <version>${openapi-generator.version}</version>
+
+                <configuration>
+                    <ignoreFileOverride>${project.basedir}/.openapi-generator-ignore</ignoreFileOverride>
+                </configuration>
+
                 <executions>
                     <execution>
                         <id>generate-server-api</id>
@@ -209,6 +221,9 @@
                                 <interfaceOnly>true</interfaceOnly>
                                 <returnResponse>true</returnResponse>
                                 <dateLibrary>java8</dateLibrary>
+                                <sortModelPropertiesByRequiredFlag>false</sortModelPropertiesByRequiredFlag>
+                                <sortParamsByRequiredFlag>false</sortParamsByRequiredFlag>
+                                <generatePom>false</generatePom>
 
                                 <useMicroProfileOpenAPIAnnotations>true</useMicroProfileOpenAPIAnnotations>
                                 <useSwaggerAnnotations>false</useSwaggerAnnotations>
@@ -219,6 +234,41 @@
                             </configOptions>
 
                             <skipIfSpecIsUnchanged>false</skipIfSpecIsUnchanged>
+                        </configuration>
+                    </execution>
+
+
+
+                    <execution>
+                        <id>current-account-service</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>
+                                ${project.basedir}/src/main/resources/openapi/clients/current-account-service.yml
+                            </inputSpec>
+                            <generatorName>java-microprofile</generatorName>
+                            <apiPackage>${project.groupId}.${server-package}.${client-package}.currentaccount</apiPackage>
+                            <modelPackage>${project.groupId}.${server-package}.${client-package}.currentaccount.model</modelPackage>
+
+                            <!--<generateSupportingFiles>false</generateSupportingFiles>-->
+
+                            <configOptions>
+                                <library>microprofile</library>
+                                <serializationLibrary>jackson</serializationLibrary>
+                                <useRuntimeException>true</useRuntimeException>
+                                <microprofileRestClientVersion>3.0</microprofileRestClientVersion>
+                                <dateLibrary>java8</dateLibrary>
+                                <sortModelPropertiesByRequiredFlag>false</sortModelPropertiesByRequiredFlag>
+                                <sortParamsByRequiredFlag>false</sortParamsByRequiredFlag>
+                                <implicitHeaders>true</implicitHeaders>
+                                <useSingleRequestParameter>true</useSingleRequestParameter>
+                                <microprofileGlobalExceptionMapper>false</microprofileGlobalExceptionMapper>
+                                <microprofileRegisterExceptionMapper>false</microprofileRegisterExceptionMapper>
+                            </configOptions>
+                            <additionalProperties>disableMultipart=true</additionalProperties>
                         </configuration>
                     </execution>
                 </executions>

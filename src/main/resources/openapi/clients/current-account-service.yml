@@ -1,0 +1,289 @@
+openapi: 3.0.1
+info:
+  title: Savings Account
+  description: 'This service domain orchestrates a consumer savings account. The typical range of services and fees covers payments from and scheduled and ad-hoc deposits to the account, standing orders, sweeps, and liens.'
+  contact:
+    name: BIAN
+    url: https://bian.org
+  version: 14.0.0
+servers:
+  - url: https://virtserver.swaggerhub.com/B154/BIAN/SavingsAccount/14.0.0
+tags:
+  - name: CR - SavingsAccountFacility
+paths:
+  '/savings-account/{savingsAccountId}/retrieve':
+    get:
+      tags:
+        - CR - SavingsAccountFacility
+      summary: ReCR Retrieve information about a savings account - either standard canned reports or selected instance attribute values
+      description: ReCR Retrieve information about a savings account - either standard canned reports or selected instance attribute values
+      operationId: retrieve
+      parameters:
+        - $ref: '#/components/parameters/savingsAccountId'
+      responses:
+        '200':
+          $ref: '#/components/responses/SavingsAccountFacility'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+components:
+  schemas:
+    ExceptionResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: General error description raised by the system.
+          example: Error calling the service
+        details:
+          type: array
+          description: List of details associated with the reported error.
+          items:
+            $ref: '#/components/schemas/ExceptionDetail'
+      description: Standard error structure containing the failure type and associated technical details.
+    ExceptionDetail:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Specific provider or component error code.
+          example: CODE0001
+        description:
+          type: string
+          description: Technical description of the specific error detail.
+          example: Invalid channel code
+      description: Technical error detail indicating the source component, code, and specific description.
+
+    DateTimeRecord:
+      type: object
+      properties:
+        dateTimeContent:
+          type: string
+          description: The particular date and time point in the progression of time
+          format: Text
+        timeZoneCode:
+          type: string
+          description: The time zone to which the date time refers.
+          format: Text
+      description: Date and time at which the status was assigned.
+    InvolvedParty:
+      type: object
+      properties:
+        partyIdentification:
+          $ref: '#/components/schemas/PartyIdentification'
+      description: Reference to a Party who plays a  specific role in the context of assigning a status.
+    AccountStatusTypeValues:
+      enum:
+        - Enabled
+        - Disabled
+      type: string
+      description: >
+        * `Enabled` - Account can be used for its intended purpose.
+        * `Disabled` - Account cannot be used for its intended purpose, either temporarily or permanently.
+    AccountStatus:
+      type: object
+      properties:
+        accountStatusType:
+          $ref: '#/components/schemas/AccountStatusTypeValues'
+      description: "A characteristic of account which refers to the LifecycleStatus of account like opened, closed, blocked, etc.\n\nSpecifies the current state of an account. (ISO20022)"
+    AccountIdentificationTypeValues:
+      enum:
+        - AccountNumber
+        - PAN
+      type: string
+      description: >
+        * `AccountNumber` - String of characters (mainly numbers) used to identify an account.(ISO20022)
+        * `PAN` - Primary Account Number - identifier scheme used to identify a card account. (OBExternalAccountIdentification4Code)
+    Identifier:
+      type: object
+      properties:
+        identifierValue:
+          type: string
+          description: 'tThe actual unique code or number (e.g., passport number, drivers license number).'
+          format: Value
+      description: ''
+    AccountIdentification:
+      type: object
+      properties:
+        accountIdentificationType:
+          $ref: '#/components/schemas/AccountIdentificationTypeValues'
+        accountIdentification:
+          $ref: '#/components/schemas/Identifier'
+      description: The identifier of account like Account Number.
+    AccountDatetimeTypeValues:
+      enum:
+        - OpeningDate
+        - ClosingDate
+        - BlockingDate
+      type: string
+      description: >
+        * `OpeningDate` - Date on which the account and related basic services are effectively operational for the account owner. (ISO20022)
+        * `ClosingDate` - Date on which the account and related services cease effectively to be operational for the account owner. (ISO20022)
+        * `BlockingDate` -
+    AccountDateTime:
+      type: object
+      properties:
+        accountDateType:
+          $ref: '#/components/schemas/AccountDatetimeTypeValues'
+        accountDate:
+          $ref: '#/components/schemas/DateTimeRecord'
+      description: 'A characteristic of account which refers to LifecycleDate of account (e.g., ClosingDate, OpeningDate, LiveDate, etc.) '
+    AccountTypeValues:
+      enum:
+        - DebitAccount
+        - CreditAccount
+        - PaymentAccount
+        - SavingAccount
+        - CurrentAccount
+      type: string
+      description: >
+        * `DebitAccount` - 
+        * `CreditAccount` - 
+        * `PaymentAccount` - 
+        * `SavingAccount` - 
+        * `CurrentAccount` -
+    Amount:
+      type: object
+      properties:
+        amountValue:
+          type: string
+          description: ''
+          format: Value
+        amountCurrency:
+          $ref: '#/components/schemas/AccountCurrency'
+      description: ''
+    AccountBalance:
+      type: object
+      properties:
+        balanceAmount:
+          $ref: '#/components/schemas/Amount'
+      description: "The state of the obligations managed on the account, the result of all entries on the account."
+    CurrencyTypeValues:
+      enum:
+        - PEN
+        - USD
+      type: string
+      description: >
+        * `USD` US Dollar - UNITED STATES OF AMERICA (THE)
+        * `PEN` Sol - PERU
+    AccountCurrency:
+      type: object
+      properties:
+        accountCurrencyType:
+          $ref: '#/components/schemas/CurrencyTypeValues'
+      description: ''
+    Name:
+      type: object
+      properties:
+        name:
+          type: string
+          description: 'A name is a word or phrase that constitutes the distinctive designation of a person, place, thing or concept. (UN/CEFAT)'
+          format: DataType
+      description: "The name of account\n\nThe account name is the name or names of the account owner(s) represented at an account level, as displayed by the ASPSP's online channels. Note, the account name is not the product name or the nickname of the account. (Open Banking)"
+    Account:
+      type: object
+      properties:
+        accountStatus:
+          $ref: '#/components/schemas/AccountStatus'
+        accountIdentification:
+          $ref: '#/components/schemas/AccountIdentification'
+        accountDates:
+          items:
+            $ref: '#/components/schemas/AccountDateTime'
+        accountBalance:
+          $ref: '#/components/schemas/AccountBalance'
+        accountName:
+          $ref: '#/components/schemas/Name'
+      description: 'Customer account to be used to credit a fee amount, e.g. reimbursement'
+    SavingsAccountFacility:
+      type: object
+      properties:
+        customerReference:
+          $ref: '#/components/schemas/InvolvedParty'
+        accountType:
+          $ref: '#/components/schemas/AccountTypeValues'
+        accountDetail:
+          $ref: '#/components/schemas/Account'
+      description: 'Fulfill any scheduled and ad-hoc obligations under a service arrangement, most typically for a financial product or facility within Savings Account. '
+    PartyIdentificationTypeValues:
+      enum:
+        - Identitycardnumber
+        - Nationalregistrationidentificationnumber
+        - Registrationauthorityidentification
+        - Passportnumber
+      type: string
+      description: >
+        * `Identitycardnumber` - Number assigned by a national authority to an identity card.
+        * `Nationalregistrationidentificationnumber` - National registration identification number. In Singapore this is known as the NRIC.
+        * `Registrationauthorityidentification` - An identifier for the Legal Entity in a business registry in the jurisdiction of legal registration, or in the appropriate registration authority. (ISO20022)
+        * `Passportnumber` - Number assigned by a passport authority.
+    PartyIdentification:
+      type: object
+      properties:
+        partyIdentificationType:
+          $ref: '#/components/schemas/PartyIdentificationTypeValues'
+        partyIdentification:
+          $ref: '#/components/schemas/Identifier'
+      description: ''
+  responses:
+    BadRequest:
+      description: BadRequest
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ExceptionResponse'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ExceptionResponse'
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ExceptionResponse'
+    NotFound:
+      description: NotFound
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ExceptionResponse'
+    TooManyRequests:
+      description: TooManyRequests
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ExceptionResponse'
+    InternalServerError:
+      description: InternalServerError
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ExceptionResponse'
+    SavingsAccountFacility:
+      description: SavingsAccountFacility
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/SavingsAccountFacility'
+
+  parameters:
+    savingsAccountId:
+      name: savingsAccountId
+      in: path
+      required: true
+      style: simple
+      schema:
+        type: string

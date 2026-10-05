@@ -7,19 +7,21 @@ import jakarta.enterprise.context.ApplicationScoped;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.reactive.messaging.Channel;
 import org.eclipse.microprofile.reactive.messaging.Emitter;
 import org.eclipse.microprofile.reactive.messaging.Message;
 
 @Slf4j
-@RequiredArgsConstructor
 @ApplicationScoped
 public class PaymentOrderInitiationProducer {
 
-  @Channel("payment-order-initiation-out")
   private final Emitter<PaymentOrderInitiationTransaction> emitter;
+
+  public PaymentOrderInitiationProducer(
+      @Channel("payment-order-initiation-out") Emitter<PaymentOrderInitiationTransaction> emitter) {
+    this.emitter = emitter;
+  }
 
   public String publish(PaymentOrderInitiationTransaction transaction) {
     String correlationId = UUID.randomUUID().toString();
